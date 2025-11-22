@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MitraScan - Informe de Auditoría Web</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* -------------------- GLOBAL DARK THEME -------------------- */
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background-color: #0b0c10;
+  color: #e6e6e6;
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  margin: 40px auto;
+  max-width: 950px;
+  background: #1c1c28;
+  padding: 35px;
+  border-radius: 12px;
+  box-shadow: 0 0 18px #00aaff33;
+}
+
+h1, h2, h3 {
+  color: #00d8ff;
+}
+
+/* -------------------- LOGO -------------------- */
+
+#logo-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+#logo-container img {
+  height: 70px;
+  opacity: 0.90;
+}
+
+/* -------------------- PORTADA -------------------- */
+
+#portada {
+  text-align: center;
+  background: #111827;
+  padding: 80px 20px 60px 20px;
+  border-radius: 15px;
+  margin-top: 40px;
+  box-shadow: 0 0 20px #00aaff55;
+}
+
+#portada h1 {
+  font-size: 2.5em;
+  color: #00d8ff;
+}
+
+#portada .info {
+  margin-top: 20px;
+  font-size: 1.2em;
+}
+
+/* -------------------- NAV -------------------- */
+
+nav {
+  position: sticky;
+  top: 0;
+  background: #081018;
+  backdrop-filter: blur(6px);
+  padding: 10px 0;
+  z-index: 100;
+  border-bottom: 1px solid #00aaff44;
+}
+
+nav a {
+  margin: 0 18px;
+  color: #00d8ff;
+  text-decoration: none;
+  font-size: 1.1em;
+  padding-bottom: 5px;
+}
+
+nav a:hover {
+  border-bottom: 2px solid #00d8ff;
+}
+
+/* -------------------- GRÁFICOS -------------------- */
+
+.charts-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.chart-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* Centra horizontal */
+  justify-content: center; /* Centra vertical */
+  padding: 20px 0;
+  text-align: center;
+}
+
+.chart-container canvas {
+  display: block;
+  margin: 0 auto;
+  max-width: 350px;
+  max-height: 350px;
+}
+
+
+.counter {
+  font-size: 2.8em;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* colores por severidad */
+.low { color: #00ff99; }
+.medium { color: #ffcc00; }
+.high { color: #ff4444; }
+
+/* -------------------- TABLE -------------------- */
+
+table {
+  width: 100%;
+  background: #111;
+  border-collapse: collapse;
+  margin-top: 25px;
+}
+
+table th {
+  background: #00aaff;
+  color: #000;
+  padding: 10px;
+}
+
+table td {
+  padding: 8px;
+  border: 1px solid #333;
+}
+
+/* -------------------- RESULTS RAW -------------------- */
+
+pre {
+  background: #000;
+  color: #00ff00;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 0.95em;
+  overflow-x: auto;
+}
+
+/* -------------------- ACCORDION -------------------- */
+
+.accordion {
+  background: #0d1117;
+  color: #00d8ff;
+  cursor: pointer;
+  padding: 15px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 1.2em;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.accordion:hover {
+  background: #112233;
+}
+
+.panel {
+  padding: 0 10px;
+  display: none;
+  background-color: #000;
+  border-left: 3px solid #00aaff55;
+  border-right: 3px solid #00aaff55;
+  border-bottom: 3px solid #00aaff55;
+  border-radius: 0 0 8px 8px;
+  margin-bottom: 20px;
+}
+
+/* -------------------- FOOTER -------------------- */
+
+footer {
+  text-align: center;
+  margin: 50px 0;
+  color: #888;
+  font-size: 0.9em;
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- LOGO -->
+<div id="logo-container">
+  <img src="logo_mitrascan.png" alt="Logo MitraScan">
+</div>
+
+<!-- ========================== NAV ========================== -->
+<nav>
+  <center>
+    <a href="#portada">Inicio</a>
+    <a href="#resumen">Resumen</a>
+    <a href="#descripcion">Descripción</a>
+    <a href="#graficos">Gráficos</a>
+    <a href="#normativa">Normativa</a>
+    <a href="#mitigacion">Mitigación</a>
+    <a href="#resultados">Resultados</a>
+  </center>
+</nav>
+
+<!-- ========================== PORTADA ========================== -->
+<section id="portada">
+  <h1>Informe de Auditoría Web Automatizada</h1>
+  <h2>Generado por MitraScan</h2>
+
+  <div class="info">
+      Auditoría realizada por: <b>Valentina Mendoza</b><br>
+      Identificador único del reporte:<br>
+      <b>835e5164609182f19b7ec843ceefa2abf95b02ae6bc65abb88b646c9fb521cf0</b>
+  </div>
+</section>
+
+<!-- ========================== RESUMEN ========================== -->
+<section id="resumen">
+  <h2>Resumen Ejecutivo</h2>
+  
+<h3>📅 Fecha del informe: 2025-11-20 10:13</h3>
+<h3>🔢 Total hallazgos: 4</h3>
+<h3>⚠️ Nivel de riesgo global: 75.0%</h3>
+
+</section>
+
+<!-- ========================== DESCRIPCIÓN ========================== -->
+<section id="descripcion">
+  <h2>Descripción Técnica del Escaneo</h2>
+  
+<h3>Descripción Técnica del Escaneo</h3>
+<p>
+El análisis utiliza <b>Nmap</b>, <b>Nikto</b> y <b>Nuclei</b> para identificar 
+vulnerabilidades relacionadas con configuración, exposición de archivos, 
+cabeceras de seguridad y servicios accesibles. Los hallazgos se presentan 
+en una tabla consolidada para facilitar una lectura ejecutiva y clara.
+</p>
+
+<table>
+<tr>
+<th>Severidad</th>
+<th>Vulnerabilidad</th>
+<th>Recomendación</th>
+</tr>
+
+<tr>
+<td style='color:#ff4444; font-weight:bold;'>Alta</td>
+<td>.git exposed</td>
+<td>Eliminar carpeta .git del servidor público.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>x-frame-options</td>
+<td>Configurar X-Frame-Options o Frame-Ancestors.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>x-content-type-options</td>
+<td>Habilitar X-Content-Type-Options: nosniff.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>directory indexing</td>
+<td>Deshabilitar listado de directorios.</td>
+</tr>
+
+<tr>
+<td style='color:#00ff99;'>Baja</td>
+<td colspan='2'>No se identificaron hallazgos en esta categoría.</td>
+</tr>
+</table>
+</section>
+
+<!-- ========================== GRÁFICOS ========================== -->
+<section id="graficos">
+  <h2>Resumen Gráfico</h2>
+
+  <div class="chart-container">
+    <h3>Distribución de Riesgos</h3>
+    <canvas id="riskPie"></canvas>
+  </div>
+
+  <center>
+    <div id="riskScore" class="counter">0%</div>
+    <div id="riskText" style="font-size:1.5em;"></div>
+  </center>
+
+<script>
+const low = Number(0);
+const medium = Number(3);
+const high = Number(1);
+
+const total = low + medium + high;
+
+const riskScore = total === 0 
+  ? 0 
+  : Math.min(((medium*2 + high*3) / (total*3)) * 100, 100);
+
+document.getElementById("riskScore").textContent = riskScore.toFixed(1) + "%";
+
+let txt = document.getElementById("riskText");
+if (riskScore < 40) { txt.textContent="RIESGO BAJO"; txt.style.color="#00ff99"; }
+else if (riskScore < 70) { txt.textContent="RIESGO MEDIO"; txt.style.color="#ffcc00"; }
+else { txt.textContent="RIESGO ALTO"; txt.style.color="#ff4444"; }
+
+new Chart(riskPie, {
+  type:'doughnut',
+  data:{
+    labels:['Bajo','Medio','Alto'],
+    datasets:[{
+      data:[low,medium,high],
+      backgroundColor:['#00ff99','#ffcc00','#ff4444']
+    }]
+  },
+  options:{
+    plugins:{
+      legend:{
+        position: 'bottom',
+        labels:{
+          color:'#fff',
+          padding: 15,
+          boxWidth: 18,
+          boxHeight: 10
+        }
+      }
+    }
+  }
+});
+</script>
+
+</section>
+<!-- ========================== NORMATIVA ========================== -->
+<section id="normativa">
+  <h2>Clasificación Normativa</h2>
+  
+<table>
+<tr>
+<th>Vulnerabilidad</th>
+<th>MITRE</th>
+<th>ISO 27001</th>
+<th>ISO 27002</th>
+<th>OWASP</th>
+<th>Ley 21.459</th>
+</tr>
+
+<tr>
+<td>.git exposed</td>
+<td>T1530 – Exfiltration</td>
+<td>A.8.9 – Protección de código</td>
+<td>8.12 – Desarrollo seguro</td>
+<td>A04:2021 – Insecure Design</td>
+<td>Art. 4 – Datos sensibles</td>
+</tr>
+
+<tr>
+<td>x-frame-options</td>
+<td>T1189 – Drive-by Compromise</td>
+<td>A.8.8 – Gestión de vulnerabilidades técnicas</td>
+<td>8.28 – Pruebas de seguridad regulares</td>
+<td>A05:2021 – Security Misconfiguration</td>
+<td>Art. 2 – Prevención y gestión de incidentes</td>
+</tr>
+
+<tr>
+<td>x-content-type-options</td>
+<td>T1059 – Command Script Execution</td>
+<td>A.8.8 – Gestión de vulnerabilidades</td>
+<td>8.28 – Pruebas de seguridad</td>
+<td>A03:2021 – Injection</td>
+<td>Art. 3 – Seguridad de información</td>
+</tr>
+
+<tr>
+<td>directory indexing</td>
+<td>T1083 – File Discovery</td>
+<td>A.5.12 – Clasificación de información</td>
+<td>8.32 – Exposición de información</td>
+<td>A05:2021 – Misconfiguration</td>
+<td>Art. 4 – Resguardo de datos</td>
+</tr>
+</table>
+</section>
+
+<section id="mitigacion">
+  
+<section id="mitigacion">
+<h2>Medidas de Mitigación</h2>
+
+<p>Las siguientes medidas se recomiendan para reducir el riesgo asociado a los hallazgos detectados.
+Cada acción está alineada con buenas prácticas de ciberseguridad y estándares internacionales.</p>
+
+<table>
+<tr>
+<th>Severidad</th>
+<th>Vulnerabilidad</th>
+<th>Medida de Mitigación</th>
+</tr>
+
+<tr>
+<td style='color:#ff4444; font-weight:bold;'>Alta</td>
+<td>.git exposed</td>
+<td>Eliminar carpeta .git del servidor público.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>x-frame-options</td>
+<td>Configurar X-Frame-Options o Frame-Ancestors.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>x-content-type-options</td>
+<td>Habilitar X-Content-Type-Options: nosniff.</td>
+</tr>
+
+<tr>
+<td style='color:#ffcc00; font-weight:bold;'>Media</td>
+<td>directory indexing</td>
+<td>Deshabilitar listado de directorios.</td>
+</tr>
+
+<tr>
+<td style='color:#00ff99;'>Baja</td>
+<td colspan='2'>No se identificaron hallazgos en esta categoría.</td>
+</tr>
+</table></section>
+</section>
+
+<!-- ======================== RESULTADOS DETALLADOS ======================== -->
+<section id="resultados">
+  <h2>Resultados Detallados</h2>
+
+  <button class="accordion">🛰️ Nmap</button>
+  <div class="panel">
+    <pre>Starting Nmap 7.95 ( https://nmap.org ) at 2025-11-20 10:11 -03
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.0000040s latency).
+Other addresses for localhost (not scanned): ::1
+Not shown: 65533 closed tcp ports (reset)
+PORT      STATE SERVICE VERSION
+80/tcp    open  http    Apache httpd 2.4.65 ((Debian))
+34665/tcp open  http    Golang net/http server
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+SF-Port34665-TCP:V=7.95%I=7%D=11/20%Time=691F1370%P=x86_64-pc-linux-gnu%r(
+SF:GenericLines,67,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Type:\x2
+SF:0text/plain;\x20charset=utf-8\r\nConnection:\x20close\r\n\r\n400\x20Bad
+SF:\x20Request")%r(GetRequest,8F,"HTTP/1\.0\x20404\x20Not\x20Found\r\nDate
+SF::\x20Thu,\x2020\x20Nov\x202025\x2013:11:12\x20GMT\r\nContent-Length:\x2
+SF:019\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\n\r\n404:\x20Pag
+SF:e\x20Not\x20Found")%r(HTTPOptions,8F,"HTTP/1\.0\x20404\x20Not\x20Found\
+SF:r\nDate:\x20Thu,\x2020\x20Nov\x202025\x2013:11:12\x20GMT\r\nContent-Len
+SF:gth:\x2019\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\n\r\n404:
+SF:\x20Page\x20Not\x20Found")%r(RTSPRequest,67,"HTTP/1\.1\x20400\x20Bad\x2
+SF:0Request\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnection
+SF::\x20close\r\n\r\n400\x20Bad\x20Request")%r(Help,67,"HTTP/1\.1\x20400\x
+SF:20Bad\x20Request\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nCo
+SF:nnection:\x20close\r\n\r\n400\x20Bad\x20Request")%r(SSLSessionReq,67,"H
+SF:TTP/1\.1\x20400\x20Bad\x20Request\r\nContent-Type:\x20text/plain;\x20ch
+SF:arset=utf-8\r\nConnection:\x20close\r\n\r\n400\x20Bad\x20Request")%r(Fo
+SF:urOhFourRequest,8F,"HTTP/1\.0\x20404\x20Not\x20Found\r\nDate:\x20Thu,\x
+SF:2020\x20Nov\x202025\x2013:11:27\x20GMT\r\nContent-Length:\x2019\r\nCont
+SF:ent-Type:\x20text/plain;\x20charset=utf-8\r\n\r\n404:\x20Page\x20Not\x2
+SF:0Found")%r(LPDString,67,"HTTP/1\.1\x20400\x20Bad\x20Request\r\nContent-
+SF:Type:\x20text/plain;\x20charset=utf-8\r\nConnection:\x20close\r\n\r\n40
+SF:0\x20Bad\x20Request")%r(SIPOptions,67,"HTTP/1\.1\x20400\x20Bad\x20Reque
+SF:st\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnection:\x20c
+SF:lose\r\n\r\n400\x20Bad\x20Request")%r(Socks5,67,"HTTP/1\.1\x20400\x20Ba
+SF:d\x20Request\r\nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnec
+SF:tion:\x20close\r\n\r\n400\x20Bad\x20Request")%r(OfficeScan,A3,"HTTP/1\.
+SF:1\x20400\x20Bad\x20Request:\x20missing\x20required\x20Host\x20header\r\
+SF:nContent-Type:\x20text/plain;\x20charset=utf-8\r\nConnection:\x20close\
+SF:r\n\r\n400\x20Bad\x20Request:\x20missing\x20required\x20Host\x20header"
+SF:);
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 27.78 seconds
+</pre>
+  </div>
+
+  <button class="accordion">🧩 Nikto</button>
+  <div class="panel">
+    <pre>- Nikto v2.5.0
+---------------------------------------------------------------------------
++ Target IP:          127.0.0.1
++ Target Hostname:    localhost
++ Target Port:        80
++ Target Path:        /DVWA
++ Start Time:         2025-11-20 10:11:35 (GMT-3)
+---------------------------------------------------------------------------
++ Server: Apache/2.4.65 (Debian)
++ /DVWA/: Cookie security created without the httponly flag. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
++ /DVWA/: Cookie PHPSESSID created without the httponly flag. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
++ /DVWA/: The anti-clickjacking X-Frame-Options header is not present. See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
++ /DVWA/: The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type. See: https://www.netsparker.com/web-vulnerability-scanner/vulnerabilities/missing-content-type-header/
++ Root page /DVWA redirects to: login.php
++ No CGI Directories found (use '-C all' to force check all possible dirs)
++ OPTIONS: Allowed HTTP Methods: POST, OPTIONS, HEAD, GET .
++ /DVWA/config/: Directory indexing found.
++ /DVWA/config/: Configuration information may be available remotely.
++ /DVWA/tests/: Directory indexing found.
++ /DVWA/tests/: This might be interesting.
++ /DVWA/database/: Directory indexing found.
++ /DVWA/database/: Database directory found.
++ /DVWA/docs/: Directory indexing found.
++ /DVWA/.git/index: Git Index file may contain directory listing information.
++ /DVWA/.git/HEAD: Git HEAD file found. Full repo details may be present.
++ /DVWA/.git/config: Git config file found. Infos about repo details may be present.
++ /DVWA/.gitignore: .gitignore file found. It is possible to grasp the directory structure.
++ /DVWA/.dockerignore: .dockerignore file found. It may be possible to grasp the directory structure and learn more about the site.
++ 7850 requests: 0 error(s) and 17 item(s) reported on remote host
++ End Time:           2025-11-20 10:12:13 (GMT-3) (38 seconds)
+---------------------------------------------------------------------------
++ 1 host(s) tested
+
+
+      *********************************************************************
+      Portions of the server's headers (Apache/2.4.65) are not in
+      the Nikto 2.5.0 database or are newer than the known string. Would you like
+      to submit this information (*no server specific data*) to CIRT.net
+      for a Nikto update (or you may email to sullo@cirt.net) (y/n)? 
+</pre>
+  </div>
+
+  <button class="accordion">🔍 Nuclei</button>
+  <div class="panel">
+    <pre>[[93mWRN[0m] Loading 7 unsigned templates for scan. Use with caution.
+[[92mwaf-detect[0m:[1;92mapachegeneric[0m] [[94mhttp[0m] [[34minfo[0m] http://localhost/DVWA
+[[92mexternal-service-interaction[0m] [[94mhttp[0m] [[34minfo[0m] http://localhost/DVWA
+</pre>
+  </div>
+
+<script>
+const acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function () {
+    this.classList.toggle("active");
+    const panel = this.nextElementSibling;
+    panel.style.display = (panel.style.display === "block") ? "none" : "block";
+  });
+}
+</script>
+
+</section>
+
+<footer>
+© 2025 MitraScan – Inteligencia en Auditoría Web | Desarrollado por Valentina Mendoza
+</footer>
+
+</body>
+</html>
